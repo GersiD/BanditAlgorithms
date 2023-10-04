@@ -63,9 +63,12 @@ def main():
             exp3_regret.append(exp3_r)
     plt.plot(horizon_list, ucb_regret, label="UCB")
     plt.plot(horizon_list, exp3_regret, label="EXP3")
-    # add the theoretical bounds
+    # add the theoretical bounds for exp3
     # should be bounded by 2 * sqrt(horizon * num_arms * log(num_arms))
     plt.plot(horizon_list, 2 * np.sqrt(np.array(horizon_list) * bandit.n_arms * np.log(bandit.n_arms)), label="EXP3 bound")
+    # add the theoretical bounds for ucb
+    # should be bounded by 2 * sqrt(horizon * num_arms * log(1 / delta))
+    plt.plot(horizon_list, 2 * np.sqrt(np.array(horizon_list) * bandit.n_arms * np.log(1 / delta)), label="UCB bound")
     plt.xlabel("Horizon")
     plt.ylabel("Regret")
     plt.legend()
