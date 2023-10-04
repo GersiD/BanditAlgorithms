@@ -76,8 +76,8 @@ def main():
     min_exp3_eta = None
     eta_list = []
     with Pool() as p:
-        results = p.map(bandit.run_experiment_eta, np.arange(0.01, 1, 0.01))
-        for eta, exp3_r in zip(np.arange(0.01, 1, 0.01), results):
+        results = p.map(bandit.run_experiment_eta, np.arange(0.01, 0.1, 0.01))
+        for eta, exp3_r in zip(np.arange(0.01, 0.1, 0.01), results):
             eta_list.append(eta)
             exp3_regret.append(exp3_r)
             if exp3_r < min_exp3_regret:

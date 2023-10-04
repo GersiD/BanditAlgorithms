@@ -13,10 +13,6 @@ class EXP3(object):
 
     def select_arm(self):
         """Selects the arm to pull."""
-        # Pull each arm once.
-        for arm in range(self.n_arms):
-            if self.counts[arm] == 0:
-                return arm
         # Select the arm with the highest EXP3 value.
         exp3_values = sps.softmax(self.eta * self.S)
         return np.random.choice(self.n_arms, p=exp3_values)
