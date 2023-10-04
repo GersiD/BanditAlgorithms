@@ -37,6 +37,13 @@ class BernouliBandit(object):
         exp3_regret = self.run(exp3, horizon)
         return ucb_regret, exp3_regret
 
+    def run_experiment_eta(self, eta):
+        print(f"Running experiment for eta = {eta}...")
+        horizon = 100000
+        exp3 = EXP3(self.n_arms, horizon, eta)
+        exp3_regret = self.run(exp3, horizon)
+        return exp3_regret
+
 def main():
     # Set up the experiment.
     # we have a two armed bernoulli bandit with means 0.5 and 0.5 + delta
@@ -54,13 +61,6 @@ def main():
         for ucb_r, exp3_r in results:
             ucb_regret.append(ucb_r)
             exp3_regret.append(exp3_r)
-    # for horizon in range(10, 100000, 1000):
-    #     print(f"Running experiment for horizon = {horizon}...")
-    #     ucb = UCB(bandit.n_arms, horizon)
-    #     exp3 = EXP3(bandit.n_arms, horizon)
-    #     ucb_regret.append(bandit.run(ucb, horizon))
-    #     exp3_regret.append(bandit.run(exp3, horizon))
-    #     horizon_list.append(horizon)
     plt.plot(horizon_list, ucb_regret, label="UCB")
     plt.plot(horizon_list, exp3_regret, label="EXP3")
     plt.xlabel("Horizon")
@@ -71,23 +71,19 @@ def main():
     print("Plotting complete. Running experiment part B...") 
     # now fix the horizon = 10^5 and plot the regret as a function of eta
     # for eta in range(0.01, 1, 0.01):
-    ucb_regret = []
     exp3_regret = []
     min_exp3_regret = float("inf")
     min_exp3_eta = None
     eta_list = []
-    horizon = 100000
-    ucb = UCB(bandit.n_arms, horizon)
-    for eta in range(1, 100, 1):
-        exp3 = EXP3(bandit.n_arms, horizon, eta)
-        ucb_regret.append(bandit.run(ucb, horizon))
-        exp3_regret.append(bandit.run(exp3, horizon))
-        eta_list.append(eta)
-        if exp3_regret[-1] < min_exp3_regret:
-            min_exp3_regret = exp3_regret[-1]
-            min_exp3_eta = eta
+    with Pool() as p:
+        results = p.map(bandit.run_experiment_eta, np.arange(0.01, 1, 0.01))
+        for eta, exp3_r in zip(np.arange(0.01, 1, 0.01), results):
+            eta_list.append(eta)
+            exp3_regret.append(exp3_r)
+            if exp3_r < min_exp3_regret:
+                min_exp3_regret = exp3_r
+                min_exp3_eta = eta
     print(f"Best empirical eta for delta = {delta}: ", min_exp3_eta)
-    plt.plot(eta_list, ucb_regret, label="UCB")
     plt.plot(eta_list, exp3_regret, label="EXP3")
     plt.xlabel("Eta")
     plt.ylabel("Regret")
