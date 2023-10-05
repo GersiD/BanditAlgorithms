@@ -66,9 +66,6 @@ def main():
     # add the theoretical bounds for exp3
     # should be bounded by 2 * sqrt(horizon * num_arms * log(num_arms))
     plt.plot(horizon_list, 2 * np.sqrt(np.array(horizon_list) * bandit.n_arms * np.log(bandit.n_arms)), label="EXP3 bound")
-    # add the theoretical bounds for ucb
-    # should be bounded by 2 * sqrt(horizon * num_arms * log(1 / delta))
-    plt.plot(horizon_list, 2 * np.sqrt(np.array(horizon_list) * bandit.n_arms * np.log(1 / delta)), label="UCB bound")
     plt.xlabel("Horizon")
     plt.ylabel("Regret")
     plt.legend()
@@ -82,8 +79,8 @@ def main():
     min_exp3_eta = None
     eta_list = []
     with Pool() as p:
-        results = p.map(bandit.run_experiment_eta, np.arange(0.01, 1, 0.01))
-        for eta, exp3_r in zip(np.arange(0.01, 1, 0.01), results):
+        results = p.map(bandit.run_experiment_eta, np.arange(0.01, 0.11, 0.01))
+        for eta, exp3_r in zip(np.arange(0.01, 0.11, 0.01), results):
             eta_list.append(eta)
             exp3_regret.append(exp3_r)
             if exp3_r < min_exp3_regret:
