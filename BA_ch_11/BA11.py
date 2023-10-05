@@ -46,7 +46,7 @@ class BernouliBandit(object):
 def main():
     # Set up the experiment.
     # we have a two armed bernoulli bandit with means 0.5 and 0.5 + delta
-    delta = 0.05
+    delta = 0.5
     bandit = BernouliBandit(delta)
     print("Setup complete. Running experiments...")
     # plot the regret of the UCB and EXP3 algorithms
