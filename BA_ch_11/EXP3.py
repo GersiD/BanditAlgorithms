@@ -18,9 +18,8 @@ class EXP3(object):
 
     def update(self, arm, reward):
         """Updates the algorithm's beliefs."""
+        self.S[arm] = self.S[arm] + 1 - ((1 - reward) / sps.softmax(self.eta * self.S)[arm])
         for i in range(self.n_arms):
             if i != arm:
                 # for every other arm add 1
                 self.S[i] += 1
-            else:
-                self.S[arm] = self.S[arm] + 1 - ((1 - reward) / sps.softmax(self.eta * self.S)[arm])
