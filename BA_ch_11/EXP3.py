@@ -14,7 +14,6 @@ class EXP3(object):
         """Selects the arm to pull."""
         # Select the arm with the highest EXP3 value.
         exp3_values = sps.softmax(self.eta * self.S)
-        # return np.random.choice(self.n_arms, p=exp3_values)
         return np.random.multinomial(1, exp3_values).argmax()
 
     def update(self, arm, reward):

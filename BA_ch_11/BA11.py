@@ -40,8 +40,7 @@ class BernouliBandit(object):
     def run_experiment_eta(self, eta):
         print(f"Running experiment for eta = {eta}...")
         horizon = 100000
-        exp3 = EXP3(self.n_arms, horizon, eta)
-        exp3_regret = self.run(exp3, horizon)
+        exp3_regret = self.run(EXP3(self.n_arms, horizon, eta), horizon)
         return exp3_regret
 
 def main():
@@ -78,7 +77,7 @@ def main():
     min_exp3_regret = float("inf")
     min_exp3_eta = None
     eta_list = []
-    with Pool() as p:
+    with Pool(1) as p:
         results = p.map(bandit.run_experiment_eta, np.arange(0.01, 0.11, 0.01))
         for eta, exp3_r in zip(np.arange(0.01, 0.11, 0.01), results):
             eta_list.append(eta)
