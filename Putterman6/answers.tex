@@ -1,0 +1,70 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{times}
+\usepackage{helvet}
+\usepackage{courier}
+\usepackage{array}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsbsy}
+\usepackage{amssymb}
+\newtheorem{definition}{Definition}
+\usepackage{graphicx}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{mathtools}
+\usepackage{nicefrac}
+\usepackage{bm}
+\usepackage{enumitem}
+\usepackage{tcolorbox}
+\usepackage[capitalize,noabbrev]{cleveref}
+\usepackage{theoremref}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{tikz}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
+%===================================
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma} 
+\newtheorem{proposition}{Proposition}
+\newtheorem{assumption}{Assumption} 
+
+\setlength{\parskip}{3mm plus 1mm minus 1mm}
+\setlength{\parindent}{0pt}
+
+\title{Answers to Assignment Putterman 6 for AML fall 2023}
+\author{Gersi Doko}
+
+\begin{document}
+
+\maketitle
+
+\section{Problem 6.3 From Putterman 2005}
+\begin{align*}
+	|r(s,a)| \leq M \in \mathcal{R} \quad \forall (s,a) \in \mathcal{S} \times \mathcal{A} \implies
+	\lvert\lvert v^* \rvert\rvert_\infty \leq \frac{M}{1-\gamma}
+\end{align*}
+
+\begin{proof}
+	Begin by observing that for any occupancy frequency
+	$u \in \{u \in \mathcal{R}^{SA}_+ \vert \sum_{a\in\mathcal{A}}(I - \gamma P^T_a)u(\cdot, a) = p_0\}$
+	$\sum_{(s,a)} u(s,a) = \frac{1}{1-\gamma}$. By solving the dual LP formulation found in Putterman 2005, we obtain\dots
+	\[u^* \in \arg\max_{u \in \mathcal{U}} r^T u\]
+	As noted in the book, $v^* = v_{\pi^*}$ for an optimal policy $\pi^*$, and $v_{\pi^*} = r^T u^*$. Therefore,
+	since $|r(s,a)| \leq M$, we have\dots
+	\begin{align*}
+		\lvert\lvert v^* \rvert\rvert_\infty & = \lvert\lvert v_{\pi^*} \rvert\rvert_\infty = \lvert\lvert r^T u^* \rvert\rvert_\infty
+		\leq \lvert\lvert r \rvert\rvert_\infty \lvert\lvert u^* \rvert\rvert_1 \leq M \lvert\lvert u^* \rvert\rvert_1
+		= M \sum_{(s,a)} u^*(s,a) = \frac{M}{1-\gamma}
+	\end{align*}
+\end{proof}
+
+\section{Problem 6.11 From Sutton and Barto 2018}
+Problem 6.11 asks why Q-learning is considered off-policy, when something like SARSA is considered on-policy. Or at least this is how
+I choose to interpret the question. The answer is due to the inner maximization over actions that occurs in Q-learning. This maximization
+is used to collect the maximum value of the next state-action pair, and is not necessarily the action that an agent would take. In SARSA,
+I can use an epsilon greedy policy (or any other) to collect my online SARSA samples, however in Q-learning, I must use a greedy policy with
+respect to the learned Q function. This being said SARSA can also be adapted to the off policy setting, by using a behavior policy to collect
+samples, and then using importance sampling to correct for the difference in the behavior policy and the target policy.
+\end{document}
