@@ -29,6 +29,7 @@ class Diffraction:
     
     def solve_l2(self):
         m = gp.Model("l2")
+        m.setParam('OutputFlag', 0)
         x = m.addVar(lb=-GRB.INFINITY, name="x")
         m.setObjective((x - self.p[0])**2 + (x - self.q[0])**2, GRB.MINIMIZE)
         m.optimize()
@@ -64,8 +65,10 @@ class Diffraction:
         plt.scatter(self.p[0], self.p[1], c='r', label='p')
         plt.scatter(self.q[0], self.q[1], c='b', label='q')
         x = self.solve_l2_sqrd()
+        print("L2 Sqrd: ", x)
         plt.scatter(x, 0, c='g', label='L2 Sqrd')
-        # x = self.solve_l2()
+        x = self.solve_l2()
+        print("L2: ", x)
         # plt.scatter(x, 0, c='y', label='L2')
         # draw x axis
         plt.axvline(x=0, color='black', lw=1)
@@ -78,7 +81,7 @@ class Diffraction:
         plt.xlim(-10, 10)
         plt.ylim(-10, 10)
         plt.legend()
-        plt.show()
+        # plt.show()
 
 
 p = np.array([1,2])
